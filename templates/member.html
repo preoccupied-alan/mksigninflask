@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Page</title>
+</head>
+<body>
+    <h1>Member Page</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Slot</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot, name in data.items() %}
+            <tr>
+                <td>{{ slot }}</td>
+                <td>{{ name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

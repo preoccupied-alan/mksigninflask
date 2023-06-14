@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Admin Page</title>
+</head>
+<body>
+    <h1>Secure Admin Page</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Slot</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot, name in data.items() %}
+            <tr>
+                <td>{{ slot }}</td>
+                <td>{{ name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="/randomize" method="POST">
+        <input type="submit" value="Randomize">
+    </form>
+    <form action="/reset" method="POST">
+        <input type="submit" value="Reset">
+    </form>
+</body>
+</html>
