@@ -2,8 +2,42 @@
 <html>
 <head>
     <title>Secure Admin Page</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            color: #FFAF00;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
+    <img src="/static/logo.png" alt="Logo" class="logo">
     <h1>Secure Admin Page</h1>
     <table>
         <thead>
@@ -21,11 +55,13 @@
             {% endfor %}
         </tbody>
     </table>
-    <form action="/randomize" method="POST">
-        <input type="submit" value="Randomize">
-    </form>
-    <form action="/reset" method="POST">
-        <input type="submit" value="Reset">
-    </form>
+    <div class="button-container">
+        <form action="/randomize" method="POST">
+            <button type="submit">Randomize</button>
+        </form>
+        <form action="/reset" method="POST">
+            <button type="submit">Reset</button>
+        </form>
+    </div>
 </body>
 </html>
