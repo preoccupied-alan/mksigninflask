@@ -3,13 +3,37 @@
 <head>
     <title>Secure Password Page</title>
     <style>
-        h1 {
+        body {
+            background-color: black;
+            color: white;
             text-align: center;
+        }
+
+        h1 {
+            color: #FFAF00;
             font-size: 24px;
         }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
     </style>
+    <script>
+        function updatePassword() {
+            fetch('/get_password')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('password').textContent = data.password;
+                });
+        }
+
+        setInterval(updatePassword, 30000);
+    </script>
 </head>
 <body>
-    <h1>{{ password }}</h1>
+    <img src="/static/logo.png" alt="Logo" class="logo">
+    <h1 id="password">{{ password }}</h1>
 </body>
 </html>

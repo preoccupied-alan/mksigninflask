@@ -8,7 +8,7 @@
             color: white;
             text-align: center;
         }
-        
+
         h1 {
             color: #FFAF00;
         }
@@ -19,6 +19,17 @@
             margin-bottom: 20px;
         }
     </style>
+    <script>
+        function updatePassword() {
+            fetch('/get_password')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('password').textContent = data.password;
+                });
+        }
+
+        setInterval(updatePassword, 30000);
+    </script>
 </head>
 <body>
     <img src="/static/logo.png" alt="Logo" class="logo">
