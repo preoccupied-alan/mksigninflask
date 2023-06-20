@@ -8,6 +8,8 @@ app = Flask(__name__)
 
 # Global variables
 password = ""
+name_input_enabled = False
+submit_button_enabled = False
 
 def generate_password():
     global password

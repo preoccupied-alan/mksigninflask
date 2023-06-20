@@ -28,7 +28,21 @@
                 });
         }
 
-        setInterval(updatePassword, 20000);
+        setInterval(updatePassword, 10000); // Refresh every 10 seconds
+        updatePassword(); // Initial fetch when the page loads
+
+        function validatePassword() {
+            var passwordInput = document.getElementById('password-input').value;
+            var actualPassword = document.getElementById('password').textContent;
+
+            if (passwordInput === actualPassword) {
+                document.getElementById('name-input').disabled = false;
+                document.getElementById('submit-button').disabled = false;
+            } else {
+                document.getElementById('name-input').disabled = true;
+                document.getElementById('submit-button').disabled = true;
+            }
+        }
     </script>
 </head>
 <body>
@@ -36,10 +50,10 @@
     <h1>Welcome to My Website</h1>
     <form action="/save" method="POST">
         <label for="password">Enter Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <input type="password" id="password-input" name="password" required onkeyup="validatePassword()"><br>
         <label for="name">Enter Your Name:</label>
-        <input type="text" id="name" name="name" required><br>
-        <input type="submit" value="Submit">
+        <input type="text" id="name-input" name="name" required disabled><br>
+        <input type="submit" id="submit-button" value="Submit" disabled>
     </form>
 </body>
 </html>
