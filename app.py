@@ -37,13 +37,22 @@ def index():
 
 @app.route("/save", methods=["POST"])
 def save():
-    password = request.form.get("password")
-    name = request.form.get("name")
-    if password.lower() == open(password_file).read().strip().lower():
-        update_list(name)
-        return render_template("member.html")
+    # ...
+
+    # Check if the 'name' field exists in the POST data
+    if "name" in request.form:
+        name = request.form["name"]
+        if name.strip() != "":
+            with open(list_file, "r") as file:
+                data = json.load(file)
+            data[slot] = name.strip()
+            with open(list_file, "w") as file:
+                json.dump(data, file)
+            return redirect(url_for("member"))
+        else:
+            return "Invalid name"
     else:
-        return render_template("index.html", error="Invalid password. Please try again.")
+        return "Name field not found"
 
 
 # ...
