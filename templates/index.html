@@ -1,42 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Page</title>
+    <title>Sign In Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Login Page</h1>
-
-    <form id="loginForm">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password">
-        <button type="submit">Submit</button>
-    </form>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Function to handle form submission
-            $("#loginForm").submit(function(event) {
-                event.preventDefault(); // Prevent the form from submitting normally
-
-                // Get the password value
-                var password = $("#password").val();
-
-                // Send an AJAX request to check the password
-                $.ajax({
-                    url: "/check_password",
-                    type: "POST",
-                    data: { password: password },
-                    success: function(response) {
-                        if (response.success) {
-                            window.location.href = "/securepasspage";
-                        } else {
-                            alert("Invalid password");
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Welcome to the Sign In Page</h1>
+        <form action="/save" method="POST">
+            <label for="name">Enter your name:</label>
+            <input type="text" id="name" name="name" required>
+            <input type="submit" value="Submit">
+        </form>
+        <p id="message"></p>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
