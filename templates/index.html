@@ -8,33 +8,38 @@
     <div class="container">
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
         <h1>Welcome to the Sign In Page</h1>
-        <h2>Password: <span id="password"></span></h2>
         <form action="/save" method="POST">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
             <label for="name">Enter your name:</label>
-            <input type="text" id="name" name="name" required>
-            <input type="submit" value="Submit">
+            <input type="text" id="name" name="name" disabled>
+            <br>
+            <input type="submit" id="submitBtn" value="Submit" disabled>
+            <p id="message"></p>
         </form>
-        <p id="message"></p>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Function to update the password display
-            function updatePassword() {
+            $("#password").on("input", function() {
+                var enteredPassword = $(this).val();
                 $.ajax({
                     url: "/get_password",
                     type: "GET",
                     success: function(response) {
-                        $("#password").text(response);
+                        if (response.toLowerCase() === enteredPassword.toLowerCase()) {
+                            $("#name").prop("disabled", false);
+                            $("#submitBtn").prop("disabled", false);
+                            $("#message").text("");
+                        } else {
+                            $("#name").prop("disabled", true);
+                            $("#submitBtn").prop("disabled", true);
+                            $("#message").text("Invalid password. Please try again.");
+                        }
                     }
                 });
-            }
-
-            // Call the updatePassword function initially
-            updatePassword();
-
-            // Update the password every minute
-            setInterval(updatePassword, 60000);
+            });
         });
     </script>
 </body>
