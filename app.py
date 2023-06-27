@@ -46,12 +46,18 @@ def save():
         return render_template("index.html", error="Invalid password. Please try again.")
 
 
+# ...
+
 @app.route("/get_password")
 def get_password():
     print("GET /get_password request received")  # Add this line for debugging
     with open(password_file, "r") as file:
         password = file.read().strip()
+    print("Password retrieved:", password)  # Add this line for debugging
     return jsonify(password=password)
+
+# ...
+
 
 
 @app.route("/admin")

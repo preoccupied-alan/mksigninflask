@@ -37,6 +37,7 @@
         updatePassword(); // Initial fetch when the page loads
 
         setInterval(() => {
+            console.log("Reloading the page");  // Add this line for debugging
             document.location.reload();
         }, 60000); // Reload the page every 60 seconds
     </script>
