@@ -1,120 +1,51 @@
 from flask import Flask, render_template, request, jsonify
 import random
-import string
-import json
-import time
 
 app = Flask(__name__)
 
-password_file = "password.txt"
-list_file = "list.json"
-admin_password = "admin123"  # Change this to your desired administrator password
-
+password = ""
 
 def generate_password():
-    while True:
-        password = ''.join(random.choices(string.ascii_uppercase, k=6))
-        with open(password_file, "w") as file:
-            file.write(password)
-        time.sleep(60)  # Wait for 60 seconds before generating the next password
+    global password
+    characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    password = "".join(random.choice(characters) for _ in range(6))
 
-
-def update_list(name):
-    with open(list_file, "r") as file:
-        data = json.load(file)
-    for slot in range(1, 41):
-        if f"Slot {slot}" not in data:
-            data[f"Slot {slot}"] = name
-            break
-    with open(list_file, "w") as file:
-        json.dump(data, file)
-
-
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
-
-@app.route("/save", methods=["POST"])
-def save():
-    # ...
-
-    # Check if the 'name' field exists in the POST data
-    if "name" in request.form:
-        name = request.form["name"]
-        if name.strip() != "":
-            with open(list_file, "r") as file:
-                data = json.load(file)
-            data[slot] = name.strip()
-            with open(list_file, "w") as file:
-                json.dump(data, file)
-            return redirect(url_for("member"))
-        else:
-            return "Invalid name"
-    else:
-        return "Name field not found"
-
-
-# ...
-
-@app.route("/get_password")
+@app.route('/get_password')
 def get_password():
-    print("GET /get_password request received")  # Add this line for debugging
-    with open(password_file, "r") as file:
-        password = file.read().strip()
-    print("Password retrieved:", password)  # Add this line for debugging
-    return jsonify(password=password)
+    return password
 
-# ...
+@app.route('/save', methods=['POST'])
+def save():
+    name = request.form.get('name')
+    if name:
+        with open('list.json', 'a') as file:
+            file.write(name + '\n')
+    return jsonify(success=True)
 
+@app.route('/member')
+def member():
+    data = []
+    with open('list.json', 'r') as file:
+        data = file.read().splitlines()
+    return render_template('member.html', data=data)
 
+@app.route('/secureadmin', methods=['GET', 'POST'])
+def secureadmin():
+    if request.method == 'POST':
+        password_attempt = request.form.get('password')
+        if password_attempt == 'your_admin_password':
+            with open('list.json', 'w') as file:
+                file.write('')
+    return render_template('secureadmin.html')
 
-@app.route("/admin")
-def admin():
-    password = request.args.get("password")
-    if password == admin_password:
-        with open(list_file, "r") as file:
-            data = json.load(file)
-        return render_template("secureadmin.html", data=data)
-    else:
-        return render_template("secureadmin.html", error="Invalid password. Please try again.")
-
-
-@app.route("/randomize")
-def randomize():
-    password = request.args.get("password")
-    if password == admin_password:
-        with open(list_file, "r") as file:
-            data = json.load(file)
-        slots = list(data.keys())
-        random.shuffle(slots)
-        data = {slot: data[slot] for slot in slots}
-        with open(list_file, "w") as file:
-            json.dump(data, file)
-    return render_template("secureadmin.html")
-
-
-@app.route("/reset")
-def reset():
-    password = request.args.get("password")
-    if password == admin_password:
-        data = {f"Slot {slot}": "" for slot in range(1, 41)}
-        with open(list_file, "w") as file:
-            json.dump(data, file)
-    return render_template("secureadmin.html")
-
-
-@app.route("/securepasspage")
+@app.route('/securepasspage')
 def securepasspage():
-    password = request.args.get("password")
-    if password == admin_password:
-        with open(password_file, "r") as file:
-            password = file.read().strip()
-        return render_template("securepasspage.html", password=password)
-    else:
-        return render_template("securepasspage.html", error="Invalid password. Please try again.")
+    return render_template('securepasspage.html', password=password)
 
-
-if __name__ == "__main__":
-    generate_password()  # Generate initial password on server startup
+if __name__ == '__main__':
+    generate_password()  # Generate initial password
     app.run(debug=True)
