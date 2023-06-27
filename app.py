@@ -19,6 +19,15 @@ def index():
 def get_password():
     return password
 
+@app.route('/update_password', methods=['POST'])
+def update_password():
+    new_password = request.form.get('new_password')
+    if new_password:
+        password = new_password
+        return jsonify(success=True, message="Password updated successfully")
+
+    return jsonify(success=False, message="Invalid request")
+
 @app.route('/save', methods=['POST'])
 def save():
     name = request.form.get('name')
