@@ -16,6 +16,7 @@ def index():
 
 @app.route('/get_password')
 def get_password():
+    print("Password:", password)
     return password
 
 @app.route('/save', methods=['POST'])
