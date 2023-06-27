@@ -16,6 +16,8 @@ def index():
 
 @app.route('/get_password')
 def get_password():
+    if not password:
+        generate_password()
     return password
 
 @app.route('/save', methods=['POST'])
@@ -44,8 +46,9 @@ def secureadmin():
 
 @app.route('/securepasspage')
 def securepasspage():
+    if not password:
+        generate_password()
     return render_template('securepasspage.html', password=password)
 
 if __name__ == '__main__':
-    generate_password()  # Generate initial password
     app.run(debug=True)
