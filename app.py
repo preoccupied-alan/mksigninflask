@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import random
+import json
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ def generate_password():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', password=password)
 
 @app.route('/get_password')
 def get_password():
@@ -22,15 +23,28 @@ def get_password():
 def save():
     name = request.form.get('name')
     if name:
-        with open('list.json', 'a') as file:
-            file.write(name + '\n')
-    return jsonify(success=True)
+        with open('list.json', 'r+') as file:
+            data = json.load(file)
+            available_index = None
+            for i in range(len(data)):
+                if data[i] is None:
+                    available_index = i
+                    break
+            if available_index is not None:
+                data[available_index] = name
+                file.seek(0)
+                json.dump(data, file)
+                file.truncate()
+                return jsonify(success=True)
+            else:
+                return jsonify(success=False, message="List is full")
+
+    return jsonify(success=False, message="Invalid request")
 
 @app.route('/member')
 def member():
-    data = []
     with open('list.json', 'r') as file:
-        data = file.read().splitlines()
+        data = json.load(file)
     return render_template('member.html', data=data)
 
 @app.route('/secureadmin', methods=['GET', 'POST'])
@@ -39,13 +53,13 @@ def secureadmin():
         password_attempt = request.form.get('password')
         if password_attempt == 'your_admin_password':
             with open('list.json', 'w') as file:
-                file.write('')
+                json.dump([None] * 10, file)
     return render_template('secureadmin.html')
 
 @app.route('/securepasspage')
 def securepasspage():
-    generate_password()  # Generate new password
     return render_template('securepasspage.html', password=password)
 
 if __name__ == '__main__':
+    generate_password()  # Generate initial password
     app.run(debug=True)

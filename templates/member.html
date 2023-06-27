@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Members Page</title>
+    <title>Member List</title>
 </head>
 <body>
-    <h1>Members List</h1>
+    <h1>Member List</h1>
     <ul>
         {% for name in data %}
-            <li>{{ name }}</li>
+            {% if name %}
+                <li>{{ name }}</li>
+            {% else %}
+                <li>[Empty]</li>
+            {% endif %}
         {% endfor %}
     </ul>
 </body>
