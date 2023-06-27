@@ -21,9 +21,11 @@
     </style>
     <script>
         function updatePassword() {
+            console.log("Fetching password from server");  // Add this line for debugging
             fetch('/get_password')
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Received password from server:", data.password);  // Add this line for debugging
                     document.getElementById('password').textContent = data.password;
                 })
                 .catch(error => {

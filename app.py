@@ -48,6 +48,7 @@ def save():
 
 @app.route("/get_password")
 def get_password():
+    print("GET /get_password request received")  # Add this line for debugging
     with open(password_file, "r") as file:
         password = file.read().strip()
     return jsonify(password=password)

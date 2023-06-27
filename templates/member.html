@@ -24,12 +24,12 @@
         }
 
         th, td {
-            padding: 10px;
+            padding: 5px 10px;
         }
     </style>
 </head>
 <body>
-    <img src="/static/logo.png" alt="Logo" class="logo">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
     <h1>Member Page</h1>
     <table>
         <thead>
