@@ -1,46 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign In Page</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Sign In</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-        <h1>Welcome to the Sign In Page</h1>
-        <form action="/save" method="POST">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <label for="name">Enter your name:</label>
-            <input type="text" id="name" name="name" disabled>
-            <br>
-            <input type="submit" id="submitBtn" value="Submit" disabled>
-            <p id="message"></p>
-        </form>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#password").on("input", function() {
-                var enteredPassword = $(this).val();
-                $.ajax({
-                    url: "/get_password",
-                    type: "GET",
-                    success: function(response) {
-                        if (response.toLowerCase() === enteredPassword.toLowerCase()) {
-                            $("#name").prop("disabled", false);
-                            $("#submitBtn").prop("disabled", false);
-                            $("#message").text("");
-                        } else {
-                            $("#name").prop("disabled", true);
-                            $("#submitBtn").prop("disabled", true);
-                            $("#message").text("Invalid password. Please try again.");
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    <h1>Sign In</h1>
+    <form action="/update_password" method="post">
+        <label for="new_password">Enter Password:</label>
+        <input type="text" id="new_password" name="new_password" required>
+        <input type="submit" value="Update Password">
+    </form>
+    <hr>
+    <h2>Members:</h2>
+    <form action="/add_member" method="post">
+        <label for="name">Enter Name:</label>
+        <input type="text" id="name" name="name" required {% if len(member_list) >= MAX_LIST_SIZE %}disabled{% endif %}>
+        <input type="submit" value="Add Member" {% if len(member_list) >= MAX_LIST_SIZE %}disabled{% endif %}>
+    </form>
+    <h3>Member List:</h3>
+    <ul>
+        {% for member in member_list %}
+            <li>{{ member }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
