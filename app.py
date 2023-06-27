@@ -20,6 +20,14 @@ def get_password():
         generate_password()
     return password
 
+@app.route('/check_password', methods=['POST'])
+def check_password():
+    user_password = request.form.get('password')
+    if user_password == password:
+        return jsonify(success=True)
+    else:
+        return jsonify(success=False)
+
 @app.route('/save', methods=['POST'])
 def save():
     name = request.form.get('name')

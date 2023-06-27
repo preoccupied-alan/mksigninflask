@@ -1,57 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Password Protected Page</title>
+    <title>Login Page</title>
 </head>
 <body>
-    <h1>Welcome to the Password Protected Page</h1>
-    <form id="password-form" action="/check_password" method="post">
-        <label for="password-input">Enter Password:</label>
-        <input type="password" id="password-input" name="password" required>
-        <br>
-        <label for="name-input">Enter Your Name:</label>
-        <input type="text" id="name-input" name="name" disabled>
-        <br>
-        <input type="submit" id="submit-button" value="Submit" disabled>
+    <h1>Login Page</h1>
+
+    <form id="loginForm">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <button type="submit">Submit</button>
     </form>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const passwordForm = document.getElementById("password-form");
-            const passwordInput = document.getElementById("password-input");
-            const nameInput = document.getElementById("name-input");
-            const submitButton = document.getElementById("submit-button");
+        $(document).ready(function() {
+            // Function to handle form submission
+            $("#loginForm").submit(function(event) {
+                event.preventDefault(); // Prevent the form from submitting normally
 
-            passwordForm.addEventListener("submit", function(event) {
-                event.preventDefault();
+                // Get the password value
+                var password = $("#password").val();
 
-                const enteredPassword = passwordInput.value;
-
-                // Perform AJAX request to check the password
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/check_password", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            const response = xhr.responseText;
-                            if (response === "success") {
-                                // Enable name input and submit button
-                                nameInput.disabled = false;
-                                submitButton.disabled = false;
-                            } else {
-                                // Clear name input and disable submit button
-                                nameInput.value = "";
-                                nameInput.disabled = true;
-                                submitButton.disabled = true;
-                                alert("Incorrect password. Please try again.");
-                            }
+                // Send an AJAX request to check the password
+                $.ajax({
+                    url: "/check_password",
+                    type: "POST",
+                    data: { password: password },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.href = "/securepasspage";
                         } else {
-                            alert("An error occurred. Please try again.");
+                            alert("Invalid password");
                         }
                     }
-                };
-                xhr.send("password=" + encodeURIComponent(enteredPassword));
+                });
             });
         });
     </script>
