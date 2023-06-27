@@ -44,8 +44,8 @@ def secureadmin():
 
 @app.route('/securepasspage')
 def securepasspage():
+    generate_password()  # Generate new password
     return render_template('securepasspage.html', password=password)
 
 if __name__ == '__main__':
-    generate_password()  # Generate initial password
     app.run(debug=True)
