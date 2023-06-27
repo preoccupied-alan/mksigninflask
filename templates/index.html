@@ -15,7 +15,7 @@
     <h2>Members:</h2>
     <form action="/add_member" method="post">
         <label for="name">Enter Name:</label>
-        <input type="text" id="name" name="name" required {% if len(member_list) >= MAX_LIST_SIZE %}disabled{% endif %}>
+        <input type="text" id="name" name="name" {% if member_list|length >= MAX_LIST_SIZE %}disabled{% endif %}>
         <input type="submit" value="Add Member" {% if len(member_list) >= MAX_LIST_SIZE %}disabled{% endif %}>
     </form>
     <h3>Member List:</h3>
