@@ -31,34 +31,12 @@
                 });
         }
 
-        function enableForm() {
-            var passwordInput = document.getElementById('password-input').value;
-            var actualPassword = document.getElementById('password').textContent;
-            var nameInput = document.getElementById('name-input');
-            var submitButton = document.getElementById('submit-button');
-
-            if (passwordInput.toLowerCase() === actualPassword.toLowerCase()) {
-                nameInput.disabled = false;
-                submitButton.disabled = false;
-            } else {
-                nameInput.disabled = true;
-                submitButton.disabled = true;
-            }
-        }
-
-        function submitPassword(event) {
-            event.preventDefault();
-            enableForm();
-            var nameInput = document.getElementById('name-input');
-            var submitButton = document.getElementById('submit-button');
-
-            if (!nameInput.disabled && !submitButton.disabled) {
-                document.getElementById('password-form').submit();
-            }
-        }
-
-        setInterval(updatePassword, 30000); // Refresh every 30 seconds
+        setInterval(updatePassword, 10000); // Refresh every 10 seconds
         updatePassword(); // Initial fetch when the page loads
+
+        setInterval(() => {
+            document.location.reload();
+        }, 60000); // Reload the page every 60 seconds
     </script>
 </head>
 <body>
@@ -72,10 +50,5 @@
         <input type="submit" id="submit-button" value="Submit" disabled>
         <button onclick="submitPassword(event)">Submit Password</button>
     </form>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            enableForm(); // Enable form on page load
-        });
-    </script>
 </body>
 </html>

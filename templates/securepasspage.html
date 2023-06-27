@@ -11,7 +11,6 @@
 
         h1 {
             color: #FFAF00;
-            font-size: 24px;
         }
 
         .logo {
@@ -32,12 +31,20 @@
                 });
         }
 
-        setInterval(updatePassword, 30000); // Refresh every 30 seconds
+        setInterval(updatePassword, 10000); // Refresh every 10 seconds
         updatePassword(); // Initial fetch when the page loads
+
+        setInterval(() => {
+            document.location.reload();
+        }, 60000); // Reload the page every 60 seconds
     </script>
 </head>
 <body>
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-    <h1 id="password"></h1>
+    <h1>Secure Password Page</h1>
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %}
+    <h2 id="password"></h2>
 </body>
 </html>

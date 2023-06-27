@@ -24,21 +24,16 @@
         }
 
         th, td {
-            padding: 10px;
-        }
-
-        .button-container {
-            margin-bottom: 20px;
-        }
-
-        .button-container button {
-            margin: 5px;
+            padding: 5px 10px;
         }
     </style>
 </head>
 <body>
-    <img src="/static/logo.png" alt="Logo" class="logo">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
     <h1>Secure Admin Page</h1>
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %}
     <table>
         <thead>
             <tr>
@@ -55,13 +50,14 @@
             {% endfor %}
         </tbody>
     </table>
-    <div class="button-container">
-        <form action="/randomize" method="POST">
-            <button type="submit">Randomize</button>
-        </form>
-        <form action="/reset" method="POST">
-            <button type="submit">Reset</button>
-        </form>
-    </div>
+    <br>
+    <form action="/randomize" method="GET">
+        <input type="hidden" name="password" value="{{ password }}">
+        <input type="submit" value="Randomize">
+    </form>
+    <form action="/reset" method="GET">
+        <input type="hidden" name="password" value="{{ password }}">
+        <input type="submit" value="Reset">
+    </form>
 </body>
 </html>
