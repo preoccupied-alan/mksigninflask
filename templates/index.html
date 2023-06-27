@@ -8,6 +8,7 @@
     <div class="container">
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
         <h1>Welcome to the Sign In Page</h1>
+        <h2>Password: <span id="password"></span></h2>
         <form action="/save" method="POST">
             <label for="name">Enter your name:</label>
             <input type="text" id="name" name="name" required>
@@ -15,6 +16,26 @@
         </form>
         <p id="message"></p>
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to update the password display
+            function updatePassword() {
+                $.ajax({
+                    url: "/get_password",
+                    type: "GET",
+                    success: function(response) {
+                        $("#password").text(response);
+                    }
+                });
+            }
+
+            // Call the updatePassword function initially
+            updatePassword();
+
+            // Update the password every minute
+            setInterval(updatePassword, 60000);
+        });
+    </script>
 </body>
 </html>
