@@ -1,51 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Member Page</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            text-align: center;
-        }
-
-        h1 {
-            color: #FFAF00;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-        }
-
-        table {
-            margin: 0 auto;
-        }
-
-        th, td {
-            padding: 5px 10px;
-        }
-    </style>
+    <title>Members Page</title>
 </head>
 <body>
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-    <h1>Member Page</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Slot</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for slot, name in data.items() %}
-            <tr>
-                <td>{{ slot }}</td>
-                <td>{{ name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h1>Members List</h1>
+    <ul>
+        {% for name in data %}
+            <li>{{ name }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

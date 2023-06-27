@@ -4,7 +4,6 @@ import random
 app = Flask(__name__)
 
 password = ""
-data = []
 
 def generate_password():
     global password
@@ -17,31 +16,21 @@ def index():
 
 @app.route('/get_password')
 def get_password():
-    if not password:
-        generate_password()
     return password
-
-@app.route('/check_password', methods=['POST'])
-def check_password():
-    user_password = request.form.get('password')
-    if user_password == password:
-        return jsonify(success=True)
-    else:
-        return jsonify(success=False)
 
 @app.route('/save', methods=['POST'])
 def save():
     name = request.form.get('name')
     if name:
-        data.append(name)  # Append the name to the in-memory data list
         with open('list.json', 'a') as file:
             file.write(name + '\n')
-        return jsonify(success=True)
-    else:
-        return jsonify(success=False)
+    return jsonify(success=True)
 
 @app.route('/member')
 def member():
+    data = []
+    with open('list.json', 'r') as file:
+        data = file.read().splitlines()
     return render_template('member.html', data=data)
 
 @app.route('/secureadmin', methods=['GET', 'POST'])
@@ -49,10 +38,13 @@ def secureadmin():
     if request.method == 'POST':
         password_attempt = request.form.get('password')
         if password_attempt == 'your_admin_password':
-            data.clear()  # Clear the in-memory data list
             with open('list.json', 'w') as file:
                 file.write('')
     return render_template('secureadmin.html')
+
+@app.route('/securepasspage')
+def securepasspage():
+    return render_template('securepasspage.html', password=password)
 
 if __name__ == '__main__':
     generate_password()  # Generate initial password

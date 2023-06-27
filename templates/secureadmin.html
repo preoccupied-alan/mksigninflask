@@ -2,62 +2,14 @@
 <html>
 <head>
     <title>Secure Admin Page</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            text-align: center;
-        }
-
-        h1 {
-            color: #FFAF00;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-        }
-
-        table {
-            margin: 0 auto;
-        }
-
-        th, td {
-            padding: 5px 10px;
-        }
-    </style>
 </head>
 <body>
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
     <h1>Secure Admin Page</h1>
-    {% if error %}
-    <p>{{ error }}</p>
-    {% endif %}
-    <table>
-        <thead>
-            <tr>
-                <th>Slot</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for slot, name in data.items() %}
-            <tr>
-                <td>{{ slot }}</td>
-                <td>{{ name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <form action="/randomize" method="GET">
-        <input type="hidden" name="password" value="{{ password }}">
-        <input type="submit" value="Randomize">
-    </form>
-    <form action="/reset" method="GET">
-        <input type="hidden" name="password" value="{{ password }}">
-        <input type="submit" value="Reset">
+    <form action="/secureadmin" method="POST">
+        <label for="password">Enter admin password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
