@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Secure Admin Page</title>
+    <title>Secure Admin</title>
 </head>
 <body>
-    <h1>Secure Admin Page</h1>
-    <form action="/secureadmin" method="POST">
-        <label for="password">Enter admin password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <input type="submit" value="Submit">
+    <h1>Secure Admin</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in member_list %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="/randomize" method="post">
+        <button type="submit">Randomize</button>
+    </form>
+    <form action="/clear" method="post">
+        <button type="submit">Clear</button>
     </form>
 </body>
 </html>

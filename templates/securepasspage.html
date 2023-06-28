@@ -2,31 +2,20 @@
 <html>
 <head>
     <title>Secure Password Page</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Secure Password Page</h1>
-    <h2>Password: <span id="password">{{ password }}</span></h2>
-
+    <p>Password: {{ password }}</p>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Function to update the password display
-            function updatePassword() {
-                $.ajax({
-                    url: "/get_password",
-                    type: "GET",
-                    success: function(response) {
-                        $("#password").text(response);
+            setInterval(function() {
+                $.get("/get_password", function(data) {
+                    if (data) {
+                        $("p").text("Password: " + data);
                     }
                 });
-            }
-
-            // Call the updatePassword function initially
-            updatePassword();
-
-            // Update the password every minute
-            setInterval(updatePassword, 60000);
+            }, 1000);
         });
     </script>
 </body>

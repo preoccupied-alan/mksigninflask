@@ -5,14 +5,25 @@
 </head>
 <body>
     <h1>Sign In</h1>
-    <form action="/" method="post">
+    <form action="/update" method="post">
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         <br>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" {% if member_list|length >= max_list_size %}disabled{% endif %}>
-        <button type="submit" {% if member_list|length >= max_list_size %}disabled{% endif %}>Submit</button>
+        <input type="text" id="name" name="name" disabled>
+        <button type="submit" disabled>Submit</button>
     </form>
-    <p>{% if message %}{{ message }}{% endif %}</p>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.get("/get_password", function(data) {
+                if (data) {
+                    $("#password").val(data);
+                    $("input[name='name']").removeAttr("disabled");
+                    $("button[type='submit']").removeAttr("disabled");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
