@@ -2,27 +2,19 @@
 <html>
 <head>
     <title>Sign In</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Sign In</h1>
-    <form action="/update_password" method="post">
-        <label for="new_password">Enter Password:</label>
-        <input type="text" id="new_password" name="new_password" required>
-        <input type="submit" value="Update Password">
+    <h1>Welcome to the Sign In Page</h1>
+    <form action="/save" method="POST">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required {% if member_list|length >= MAX_LIST_SIZE %}disabled{% endif %}>
+        <br>
+        <input type="submit" value="Submit" {% if member_list|length >= MAX_LIST_SIZE %}disabled{% endif %}>
     </form>
-    <hr>
-    <h2>Members:</h2>
-    <form action="/add_member" method="post">
-        <label for="name">Enter Name:</label>
-        <input type="text" id="name" name="name" {% if member_list|length >= MAX_LIST_SIZE %}disabled{% endif %}>
-        <input type="submit" value="Add Member" {% if len(member_list) >= MAX_LIST_SIZE %}disabled{% endif %}>
-    </form>
-    <h3>Member List:</h3>
-    <ul>
-        {% for member in member_list %}
-            <li>{{ member }}</li>
-        {% endfor %}
-    </ul>
+    <br>
+    <p>{{ message }}</p>
 </body>
 </html>
