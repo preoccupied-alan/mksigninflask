@@ -5,10 +5,13 @@
 </head>
 <body>
     <h1>Sign In</h1>
-    <form action="/save" method="post">
+    <form action="/" method="post">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required {% if len(member_list) >= max_list_size %}disabled{% endif %}>
-        <button type="submit" {% if len(member_list) >= max_list_size %}disabled{% endif %}>Submit</button>
+        <input type="text" id="name" name="name" {% if member_list|length >= max_list_size %}disabled{% endif %}>
+        <button type="submit" {% if member_list|length >= max_list_size %}disabled{% endif %}>Submit</button>
     </form>
     <p>{% if message %}{{ message }}{% endif %}</p>
 </body>
