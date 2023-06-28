@@ -1,48 +1,62 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 import json
 
 app = Flask(__name__)
 
-# Define the maximum list size
-max_list_size = 35
+PASSWORD_FILE = "password.txt"
+LIST_FILE = "list.json"
+MAX_LIST_SIZE = 35
 
-# Load the initial member list from list.json
-with open('list.json', 'r') as file:
-    member_list = json.load(file)
+def check_password(password):
+    with open(PASSWORD_FILE, "r") as file:
+        stored_password = file.read().strip()
+    return password == stored_password
 
-@app.route('/')
-def index():
-    return render_template('index.html', member_list=member_list, max_list_size=max_list_size)
-
-@app.route('/save', methods=['POST'])
-def save():
-    name = request.form.get('name')
-    if name:
-        if len(member_list) < max_list_size:
-            member_list.append(name)
-            with open('list.json', 'w') as file:
-                json.dump(member_list, file)
-            return redirect(url_for('member'))
-        else:
-            message = 'The list is full. Cannot add more members.'
+def get_member_list():
+    if os.path.exists(LIST_FILE):
+        with open(LIST_FILE, "r") as file:
+            member_list = json.load(file)
+        return member_list
     else:
-        message = 'Name field cannot be empty.'
+        return []
 
-    return render_template('index.html', member_list=member_list, max_list_size=max_list_size, message=message)
+def save_member_list(member_list):
+    with open(LIST_FILE, "w") as file:
+        json.dump(member_list, file)
 
-@app.route('/member')
+@app.route("/", methods=["GET", "POST"])
+def index():
+    message = None
+    member_list = get_member_list()
+
+    if request.method == "POST":
+        password = request.form.get("password")
+        if check_password(password):
+            if len(member_list) < MAX_LIST_SIZE:
+                name = request.form.get("name")
+                if name:
+                    if name in member_list:
+                        message = "Name already exists in the list."
+                    else:
+                        member_list.append(name)
+                        save_member_list(member_list)
+                        return redirect(url_for("member"))
+                else:
+                    message = "Name field is empty."
+            else:
+                message = "The list is full. Cannot add more members."
+        else:
+            message = "Incorrect password. Please try again."
+
+    return render_template("index.html", message=message, member_list=member_list, max_list_size=MAX_LIST_SIZE)
+
+
+@app.route("/member")
 def member():
-    return render_template('member.html', member_list=member_list)
+    member_list = get_member_list()
+    return render_template("member.html", member_list=member_list)
 
-@app.route('/securepasspage')
-def securepasspage():
-    return render_template('securepasspage.html')
 
-@app.route('/get_password')
-def get_password():
-    with open('password.txt', 'r') as file:
-        password = file.read()
-    return password
-
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -4,17 +4,12 @@
     <title>Sign In</title>
 </head>
 <body>
-    <h1>Welcome to the Sign In Page</h1>
-    <form action="/save" method="POST">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
+    <h1>Sign In</h1>
+    <form action="/save" method="post">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required {% if member_list|length >= max_list_size %}disabled{% endif %}>
-        <br>
-        <input type="submit" value="Submit" {% if member_list|length >= max_list_size %}disabled{% endif %}>
+        <input type="text" id="name" name="name" required {% if len(member_list) >= max_list_size %}disabled{% endif %}>
+        <button type="submit" {% if len(member_list) >= max_list_size %}disabled{% endif %}>Submit</button>
     </form>
-    <br>
-    <p>{{ message }}</p>
+    <p>{% if message %}{{ message }}{% endif %}</p>
 </body>
 </html>
