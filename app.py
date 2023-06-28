@@ -1,5 +1,6 @@
 import os
 import random
+import json
 from string import ascii_letters
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 
@@ -76,12 +77,14 @@ def secureadmin():
 
 @app.route("/update", methods=["POST"])
 def update():
+    password = request.form.get("password")
     name = request.form.get("name")
-    if name:
-        if update_list(name):
-            return redirect(url_for("member"))
-        else:
-            return "Sorry, there are no more available slots tonight."
+    if password and password.lower() == get_password().lower():
+        if name:
+            if update_list(name):
+                return redirect(url_for("member"))
+            else:
+                return "Sorry, there are no more available slots tonight."
     return redirect(url_for("index"))
 
 @app.route("/randomize", methods=["POST"])
