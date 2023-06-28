@@ -1,90 +1,48 @@
-from flask import Flask, render_template, request, jsonify
-import random
+from flask import Flask, render_template, request, redirect, url_for
+import json
 
 app = Flask(__name__)
 
-PASSWORD_FILE = 'password.txt'
-LIST_FILE = 'list.json'
-MAX_LIST_SIZE = 10
+# Define the maximum list size
+max_list_size = 35
 
-password = ""
-member_list = []
-
-def generate_password():
-    global password
-    characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    password = "".join(random.choice(characters) for _ in range(6))
-    with open(PASSWORD_FILE, 'w') as file:
-        file.write(password)
-
-def read_password():
-    global password
-    with open(PASSWORD_FILE, 'r') as file:
-        password = file.read().strip()
-
-def read_member_list():
-    global member_list
-    with open(LIST_FILE, 'r') as file:
-        member_list = file.read().splitlines()
-
-def write_member_list():
-    with open(LIST_FILE, 'w') as file:
-        file.write('\n'.join(member_list))
+# Load the initial member list from list.json
+with open('list.json', 'r') as file:
+    member_list = json.load(file)
 
 @app.route('/')
 def index():
-    read_password()
-    return render_template('index.html', password=password, member_list=member_list)
+    return render_template('index.html', member_list=member_list, max_list_size=max_list_size)
 
-@app.route('/get_password')
-def get_password():
-    read_password()
-    return password
-
-@app.route('/update_password', methods=['POST'])
-def update_password():
-    global password
-    new_password = request.form.get('new_password')
-    if new_password:
-        password = new_password.strip()
-        with open(PASSWORD_FILE, 'w') as file:
-            file.write(password)
-        return jsonify(success=True, message="Password updated successfully")
-
-    return jsonify(success=False, message="Invalid request")
-
-@app.route('/add_member', methods=['POST'])
-def add_member():
+@app.route('/save', methods=['POST'])
+def save():
     name = request.form.get('name')
     if name:
-        if len(member_list) >= MAX_LIST_SIZE:
-            return jsonify(success=False, message="List is full")
+        if len(member_list) < max_list_size:
+            member_list.append(name)
+            with open('list.json', 'w') as file:
+                json.dump(member_list, file)
+            return redirect(url_for('member'))
+        else:
+            message = 'The list is full. Cannot add more members.'
+    else:
+        message = 'Name field cannot be empty.'
 
-        member_list.append(name.strip())
-        write_member_list()
-        return jsonify(success=True, message="Member added successfully")
-
-    return jsonify(success=False, message="Invalid request")
+    return render_template('index.html', member_list=member_list, max_list_size=max_list_size, message=message)
 
 @app.route('/member')
 def member():
-    read_member_list()
     return render_template('member.html', member_list=member_list)
-
-@app.route('/secureadmin', methods=['GET', 'POST'])
-def secureadmin():
-    if request.method == 'POST':
-        password_attempt = request.form.get('password')
-        if password_attempt == password:
-            member_list.clear()
-            write_member_list()
-    return render_template('secureadmin.html')
 
 @app.route('/securepasspage')
 def securepasspage():
-    read_password()
-    return render_template('securepasspage.html', password=password)
+    return render_template('securepasspage.html')
+
+@app.route('/get_password')
+def get_password():
+    with open('password.txt', 'r') as file:
+        password = file.read()
+    return password
 
 if __name__ == '__main__':
-    generate_password()  # Generate initial password
-    app.run(debug=True)
+    app.run()
