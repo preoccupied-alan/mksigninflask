@@ -2,20 +2,28 @@
 <html>
 <head>
     <title>Secure Password Page</title>
+    <meta http-equiv="refresh" content="60">
 </head>
 <body>
     <h1>Secure Password Page</h1>
-    <p>Password: {{ password }}</p>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <p id="password"></p>
     <script>
         $(document).ready(function() {
-            setInterval(function() {
-                $.get("/get_password", function(data) {
-                    if (data) {
-                        $("p").text("Password: " + data);
+            function getPassword() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_password',
+                    success: function(response) {
+                        $('#password').text(response.password);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
                     }
                 });
-            }, 1000);
+            }
+
+            getPassword();
+            setInterval(getPassword, 60000);
         });
     </script>
 </body>
