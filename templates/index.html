@@ -14,8 +14,7 @@
                     data: {password: password},
                     success: function(response) {
                         if (response.valid) {
-                            $('#name').prop('disabled', false);
-                            $('#updateButton').prop('disabled', false);
+                            $('#nameForm').show();
                             $('#errorMessage').text('');
                         } else {
                             $('#errorMessage').text('Incorrect password. Please try again.');
@@ -32,7 +31,7 @@
                 var name = $('#name').val().trim();
                 $.ajax({
                     type: 'POST',
-                    url: '/update_list',
+                    url: '/update',
                     data: {name: name},
                     success: function(response) {
                         if (response.success) {
@@ -48,6 +47,7 @@
             });
         });
     </script>
+    
     
 </head>
 <body>
