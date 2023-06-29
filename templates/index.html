@@ -14,8 +14,8 @@
                     data: {password: password},
                     success: function(response) {
                         if (response.valid) {
-                            $('#name').prop('disabled', false);
-                            $('#updateButton').prop('disabled', false);
+                            $('#passwordForm').hide();
+                            $('#nameForm').show();
                             $('#errorMessage').text('');
                         } else {
                             $('#errorMessage').text('Incorrect password. Please try again.');
@@ -51,16 +51,20 @@
 </head>
 <body>
     <h1>Sign In</h1>
-    <form id="passwordForm">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Submit</button>
-    </form>
+    <div id="passwordForm">
+        <form>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
     <p id="errorMessage"></p>
-    <form id="nameForm" style="display: none;">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        <button id="updateButton" type="submit" disabled>Update</button>
-    </form>
+    <div id="nameForm" style="display: none;">
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <button type="submit">Update</button>
+        </form>
+    </div>
 </body>
 </html>
