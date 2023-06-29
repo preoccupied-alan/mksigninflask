@@ -29,26 +29,20 @@ def update_list(name):
             member_list = json.load(file)
         for i, item in enumerate(member_list):
             if item[1] == "":
-                member_list[i] = ("Performer", name)
-                break
-        else:
-            return False
-        with open(LIST_FILE, "w") as file:
-            json.dump(member_list, file)
-        return True
+                member_list[i] = ["Performer", name]
+                with open(LIST_FILE, "w") as file:
+                    json.dump(member_list, file)
+                return True
+        return False
     return False
 
 def get_member_list():
     if os.path.exists(LIST_FILE):
         with open(LIST_FILE, "r") as file:
             member_list = json.load(file)
+        return member_list
     else:
-        member_list = [("Performer", "") for _ in range(MAX_LIST_SIZE)]
-        with open(LIST_FILE, "w") as file:
-            json.dump(member_list, file)
-    return member_list
-
-
+        return []
 
 def clear_list():
     if os.path.exists(LIST_FILE):
@@ -83,19 +77,13 @@ def secureadmin():
 def update():
     password = request.form.get("password")
     if password and password.lower() == get_password().lower():
-        return jsonify(valid=True)
-    else:
-        return jsonify(valid=False)
-
-    name = request.form.get("name")
-    if password and password.lower() == get_password().lower():
+        name = request.form.get("name")
         if name:
             if update_list(name):
-                return redirect(url_for("member"))
+                return jsonify(success=True)
             else:
-                return "Sorry, there are no more available slots tonight."
-    return redirect(url_for("index"))
-
+                return jsonify(success=False, message="Sorry, there are no more available slots tonight.")
+    return jsonify(success=False, message="Invalid password.")
 
 @app.route("/randomize", methods=["POST"])
 def randomize():
