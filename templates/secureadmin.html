@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Secure Admin</title>
+    <title>Secure Admin Page</title>
 </head>
 <body>
-    <h1>Secure Admin</h1>
+    <h1>Secure Admin Page</h1>
     <table>
         <thead>
             <tr>
@@ -13,19 +13,44 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in member_list %}
+            {% for member in member_list %}
             <tr>
-                <td>{{ item[0] }}</td>
-                <td>{{ item[1] }}</td>
+                <td>{{ member[0] }}</td>
+                <td>{{ member[1] }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <form action="/randomize" method="post">
-        <button type="submit">Randomize</button>
-    </form>
-    <form action="/clear" method="post">
-        <button type="submit">Clear</button>
-    </form>
+    <button id="randomizeButton">Randomize</button>
+    <button id="clearButton">Clear</button>
+    <script>
+        $(document).ready(function() {
+            $('#randomizeButton').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/randomize_list',
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            $('#clearButton').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/clear_list',
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
