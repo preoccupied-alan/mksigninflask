@@ -26,13 +26,13 @@
                     }
                 });
             });
-
+    
             $('#nameForm').submit(function(event) {
                 event.preventDefault();
                 var name = $('#name').val().trim();
                 $.ajax({
                     type: 'POST',
-                    url: '/update',
+                    url: '/update_list',
                     data: {name: name},
                     success: function(response) {
                         if (response.success) {
@@ -48,6 +48,7 @@
             });
         });
     </script>
+    
 </head>
 <body>
     <h1>Sign In</h1>
