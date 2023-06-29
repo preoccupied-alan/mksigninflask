@@ -10,7 +10,7 @@
                 var password = $('#password').val().trim().toLowerCase();
                 $.ajax({
                     type: 'POST',
-                    url: '/check_password',
+                    url: '/update',
                     data: {password: password},
                     success: function(response) {
                         if (response.valid) {
@@ -19,6 +19,26 @@
                             $('#errorMessage').text('');
                         } else {
                             $('#errorMessage').text('Incorrect password. Please try again.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            $('#nameForm').submit(function(event) {
+                event.preventDefault();
+                var name = $('#name').val().trim();
+                $.ajax({
+                    type: 'POST',
+                    url: '/update',
+                    data: {name: name},
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.href = '/member';
+                        } else {
+                            $('#errorMessage').text('Sorry, there are no more available slots tonight.');
                         }
                     },
                     error: function(xhr, status, error) {
@@ -42,28 +62,5 @@
         <input type="text" id="name" name="name" required disabled>
         <button id="updateButton" type="submit" disabled>Update</button>
     </form>
-    <script>
-        $(document).ready(function() {
-            $('#nameForm').submit(function(event) {
-                event.preventDefault();
-                var name = $('#name').val().trim();
-                $.ajax({
-                    type: 'POST',
-                    url: '/update_list',
-                    data: {name: name},
-                    success: function(response) {
-                        if (response.success) {
-                            window.location.href = '/member';
-                        } else {
-                            $('#errorMessage').text('Sorry, there are no more available slots tonight.');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error:', error);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>
