@@ -42,9 +42,12 @@ def get_member_list():
     if os.path.exists(LIST_FILE):
         with open(LIST_FILE, "r") as file:
             member_list = json.load(file)
-        return member_list
     else:
-        return []
+        member_list = [("Performer", "") for _ in range(MAX_LIST_SIZE)]
+        with open(LIST_FILE, "w") as file:
+            json.dump(member_list, file)
+    return member_list
+
 
 def clear_list():
     if os.path.exists(LIST_FILE):
