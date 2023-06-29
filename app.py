@@ -78,6 +78,11 @@ def secureadmin():
 @app.route("/update", methods=["POST"])
 def update():
     password = request.form.get("password")
+    if password and password.lower() == get_password().lower():
+        return jsonify(valid=True)
+    else:
+        return jsonify(valid=False)
+
     name = request.form.get("name")
     if password and password.lower() == get_password().lower():
         if name:
@@ -86,6 +91,7 @@ def update():
             else:
                 return "Sorry, there are no more available slots tonight."
     return redirect(url_for("index"))
+
 
 @app.route("/randomize", methods=["POST"])
 def randomize():
