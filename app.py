@@ -49,6 +49,7 @@ def get_member_list():
     return member_list
 
 
+
 def clear_list():
     if os.path.exists(LIST_FILE):
         os.remove(LIST_FILE)
