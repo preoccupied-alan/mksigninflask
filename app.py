@@ -58,7 +58,7 @@ def index():
 @app.route("/get_password")
 def get_password_route():
     password = get_password()
-    return jsonify(password)
+    return jsonify(password=password)
 
 @app.route("/securepasspage")
 def securepasspage():
